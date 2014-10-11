@@ -1,5 +1,10 @@
 package com.example.remindme;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+import android.content.res.AssetManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -17,10 +22,25 @@ public class CustomOnClickListener implements OnClickListener {
 		// TODO Auto-generated method stub
 		i++;
 		TextView t= (TextView)v;
-		if(i%2==0)
-		t.setText("asdasdasasd");
-		else
-			t.setText("Toggling again");
+		try {
+			
+		    BufferedReader inputReader = new BufferedReader(new FileReader("data.txt"));
+		    
+		    String inputString;
+		    StringBuffer stringBuffer = new StringBuffer();                
+		    while ((inputString = inputReader.readLine()) != null) {
+		        stringBuffer.append(inputString + "\n");
+		    }
+		    t.setText(stringBuffer);
+		    
+		} catch (IOException e) {
+			t.setText("Exception");
+		    e.printStackTrace();
+		}
+//		if(i%2==0)
+//			t.setText("asdasdasasd");
+//		else
+//			t.setText("Toggling again");
 	}
 
 }

@@ -2,33 +2,28 @@ package com.example.remindme;
 
 import java.util.ArrayList;
 
-import android.content.Context;
+
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 	ArrayList<Topic> topics=new ArrayList<Topic>();
-	ListView reminderList=null;
-	
+	ListView reminderList=null;	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		getReminderTopics();
-		populateListView();
-	}
-
-	private void getReminderTopics() {
-		// TODO Auto-generated method stub
+		setContentView(R.layout.activity_main);		
+		ReadTopics rTopics = new ReadTopics(this, "topics.txt");
+		rTopics.getTopics();
+		topics=rTopics.topics;
 		
-		topics.add(new Topic(R.drawable.abc_ab_solid_dark_holo,"Drink Water",30));
-		topics.add(new Topic(R.drawable.abc_ab_solid_dark_holo,"New Topic",60));
-		topics.add(new Topic(R.drawable.abc_ab_solid_dark_holo,"Clean",60));
-		topics.add(new Topic(R.drawable.abc_ab_solid_dark_holo,"Priming",60));		
+		populateListView();
+		
 	}
 
 	private void populateListView() {

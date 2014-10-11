@@ -4,10 +4,17 @@ public class Topic {
 private int icon;
 private String name;
 private int minutes;
-public Topic(int icon,String name,int minutes){
+private String description;
+public String getDescription() {
+	return description;
+}
+public void setDescription(String description) {
+	this.description = description;
+}
+public Topic(int icon,String name,String description){
 	this.icon=icon;
 	this.name=name;
-	this.minutes=minutes;
+	this.description=description;
 }
 public int getIcon() {
 	return icon;

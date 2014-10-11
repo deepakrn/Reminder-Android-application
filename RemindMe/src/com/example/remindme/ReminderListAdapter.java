@@ -36,6 +36,9 @@ public class ReminderListAdapter extends ArrayAdapter{
 		imageView.setBackgroundResource(R.drawable.ic_launcher);
 		TextView t = (TextView)itemView.findViewById(R.id.topic);
 		t.setText(currentTopic.getName());
+		TextView description = (TextView)itemView.findViewById(R.id.description);
+		description.setText(currentTopic.getDescription());
+		
 		t.setOnClickListener(new CustomOnClickListener(t,i));
 //		return super.getView(position, convertView, parent);
 		return itemView;
