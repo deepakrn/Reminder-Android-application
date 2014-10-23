@@ -1,2 +1,0 @@
-Water$Do u drink enough water?$30
-Meditate$Do u like to be stress free?$30
