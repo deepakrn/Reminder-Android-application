@@ -1,7 +1,11 @@
 package com.example.remindme;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
@@ -9,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public class RemindActivity extends Activity {
 	private PowerManager.WakeLock wl;
@@ -26,6 +31,19 @@ public class RemindActivity extends Activity {
 		setContentView(R.layout.activity_remind);
 		Vibrator v=(Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		v.vibrate(2000);
+		String type=getIntent().getStringExtra("type");		
+		ReadFile r = new ReadFile(getApplicationContext(),type.toLowerCase()+".txt");
+		ArrayList<Quote> quotes=r.getQuotes();
+		Random randomGenerator = new Random();
+		int randomInt = randomGenerator.nextInt(quotes.size());
+		Quote quote=quotes.get(randomInt);
+//		TypedArray images=getResources().obtainTypedArray(R.drawable.water);
+//		int a=images.getResourceId(1, -1);
+		TextView header = (TextView)findViewById(R.id.header);
+		header.setText(quote.getHeader());
+		TextView quote_text = (TextView)findViewById(R.id.quote);
+		quote_text.setText(quote.getQuote());
+		
 	}
 
 	@Override

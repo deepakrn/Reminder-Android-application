@@ -9,8 +9,30 @@
     tools:context="com.example.remindme.RemindActivity" >
 
     <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"               
+        android:layout_centerHorizontal="true"
+        android:text="Header"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/water" />
+
+    <TextView
+        android:id="@+id/quote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignLeft="@+id/image"
+        android:layout_below="@+id/header"
+        android:layout_marginTop="31dp"
+        android:layout_centerHorizontal="true"
+        style="@style/CodeFont"        
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:typeface="sans" />
 
 </RelativeLayout>

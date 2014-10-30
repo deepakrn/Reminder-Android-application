@@ -28,7 +28,7 @@
         </receiver>
         
         <receiver 
-            android:name=".ReminderActivity"
+            android:name=".AlarmReceiver"
             android:label="@string/title_activity_remind" >
         </receiver>
         <activity

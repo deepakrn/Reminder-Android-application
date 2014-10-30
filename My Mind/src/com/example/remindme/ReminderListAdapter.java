@@ -8,6 +8,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,26 +22,19 @@ import android.widget.Toast;
 public class ReminderListAdapter extends ArrayAdapter<Topic> {
 	private ArrayList<Topic> reminderList = null;
 	Context context;
-	int currentPosition;
-	
+	int currentPosition;	
 	public Intent intentsOpen;
 	private int reminder_item;
-	public Calendar calendar;
+	
 	public ReminderListAdapter(Context context, 
-			int textViewResourceId, ArrayList<Topic> reminderList,int reminder_item) {
-		super(context,textViewResourceId,reminderList);
+			int reminder_item, ArrayList<Topic> reminderList) {
+		super(context,reminder_item,reminderList);
 		this.reminderList=reminderList;
 		this.context=context;
-		this.reminder_item=reminder_item;
-		
-		// TODO Auto-generated constructor stub
+		this.reminder_item=reminder_item;		
 	}
 	public View getView(int position, View convertView, ViewGroup parent) {
-		 
 		
-		
-		calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
 		
 		View itemView = convertView;
 		if(convertView==null){				
@@ -57,7 +51,12 @@ public class ReminderListAdapter extends ArrayAdapter<Topic> {
 		description.setText(currentTopic.getDescription());		
 		t.setOnClickListener(new CustomOnClickListener(t,i));
 		Switch s = (Switch)itemView.findViewById(R.id.toggle);
-		this.currentPosition=position;
+		SharedPreferences pref=context.getSharedPreferences("com.example.remindme", Context.MODE_PRIVATE);
+		String isChecked=pref.getString(currentTopic.getName(), "false");
+		this.currentPosition=position;	
+		if(Boolean.parseBoolean(isChecked))
+		s.setChecked(Boolean.parseBoolean(isChecked));		
+			
 		s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			private int currentPosition= ReminderListAdapter.this.currentPosition;	
 			private PendingIntent pendingIntent;
@@ -66,21 +65,28 @@ public class ReminderListAdapter extends ArrayAdapter<Topic> {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				// TODO Auto-generated method stub
 				if(isChecked){
-				Intent intentsOpen = new Intent(context, ReminderActivity.class);
-				pendingIntent = PendingIntent.getBroadcast(context,111, intentsOpen, 0);
+				Intent intentsOpen = new Intent(context, AlarmReceiver.class);
+				String name=reminderList.get(currentPosition).getName();
+				intentsOpen.putExtra("type",name);				
+				pendingIntent = PendingIntent.getBroadcast(context,111, intentsOpen, PendingIntent.FLAG_UPDATE_CURRENT);
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTimeInMillis(System.currentTimeMillis());
+				SharedPreferences pref=context.getSharedPreferences("com.example.remindme", Context.MODE_PRIVATE);
+				pref.edit().putString(reminderList.get(currentPosition).getName(), "true").apply();
+				alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+				//alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 10000, pendingIntent);
+				alarmManager.set(AlarmManager.RTC_WAKEUP, 2000, pendingIntent);
 				
-				alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
-				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 10000, pendingIntent);
-				//alarmManager.set(AlarmManager.RTC_WAKEUP, 2000, pendingIntent);
-				Topic topic =reminderList.get(currentPosition);
-				Toast t = Toast.makeText(context, "Changed "+topic.getName(), 2000);
-				t.show();
+								
 				}
 				else{
+					if(alarmManager!=null)
 					alarmManager.cancel(pendingIntent);
+					SharedPreferences pref=context.getSharedPreferences("com.example.remindme", Context.MODE_PRIVATE);
+					pref.edit().putString(reminderList.get(currentPosition).getName(), "false").apply();
+					
 				}
+				
 			}
 		});
 

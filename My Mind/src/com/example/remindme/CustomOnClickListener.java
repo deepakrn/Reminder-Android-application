@@ -1,3 +1,5 @@
+//this is a sample onClickListener implementation to check if onClick event is triggered
+//even for text views. The event is trigger onClick of text!!
 package com.example.remindme;
 
 import java.io.BufferedReader;

@@ -16,32 +16,22 @@ import android.widget.ListView;
 import android.content.Intent;
 
 public class MainActivity extends Activity {
-	ArrayList<Topic> topics=new ArrayList<Topic>();
-	static PendingIntent pendingIntent;
-	static AlarmManager alarmManager;
-	ListView reminderList=null;	
+	ArrayList<Topic> topics=new ArrayList<Topic>();	
+	ListView reminderList=null;					//contains list of reminder topics that are stored in the topics file.
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);		
-		ReadTopics rTopics = new ReadTopics(this, "topics.txt");
-		rTopics.getTopics();
-		topics=rTopics.topics;
-		//getListView();
-//		Intent intentsOpen = new Intent(this, TestActivity.class);
-//		intentsOpen.setAction("test");
-//		pendingIntent = PendingIntent.getBroadcast(this,111, intentsOpen, 0);
-//		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//		Calendar calendar = Calendar.getInstance();
-//		calendar.setTimeInMillis(System.currentTimeMillis());
-//		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 10000, pendingIntent);
+		ReadFile rTopics = new ReadFile(this, "topics.txt");	//Getting topics from file topics.txt. 
+		topics=rTopics.getTopics();					//reading the file and getting the topics				
 		populateListView();
 	}
 
 	private void populateListView() {
-		ArrayAdapter<Topic> reminderListAdapter = new ReminderListAdapter(this,R.layout.reminder_item,topics,R.layout.reminder_item);
+		ArrayAdapter<Topic> reminderListAdapter = new ReminderListAdapter(this,R.layout.reminder_item,topics);
 		reminderList=(ListView) findViewById(R.id.list);
 		reminderList.setAdapter(reminderListAdapter);
+		
 	}
 
 	@Override
